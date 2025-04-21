@@ -1,0 +1,46 @@
+baseURL = 'https://nguyen.be/'
+languageCode = 'en-us'
+title = ''
+theme = 'typo'
+
+[taxonomies]
+tag = 'tags'
+
+[params]
+description = "A Tech Blog"
+theme = 'auto'
+colorPalette = 'base16-ocean'
+hideHeader = false
+showFooter = false
+
+# Intro on main page, content is markdown
+homeIntroTitle = ''
+homeIntroContent = """
+"""
+
+# Collection to display on home
+homeCollectionTitle = ''
+homeCollection = 'posts'
+
+# Lists parameters
+paginationSize = 100
+listSummaries = true
+listDateFormat = '2 Jan 2006'
+
+# Breadcrumbs
+[params.breadcrumbs]
+enabled = false
+
+# Main menu pages
+[[params.menu]]
+name = "home"
+url = "/"
+
+[[params.menu]]
+name = "about"
+url = "/about"
+
+# Syntax highlight on code blocks
+[markup]
+[markup.highlight]
+style = 'algol'
