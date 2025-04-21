@@ -1,10 +1,11 @@
 baseURL = 'https://linh.nguyen.be'
 languageCode = 'en-us'
-title = ''
+title = "linh nguyen's blog"
 theme = 'typo'
 
 [taxonomies]
 tag = 'tags'
+
 
 [params]
 description = "A Tech Blog"
@@ -17,7 +18,6 @@ showFooter = false
 homeIntroTitle = ''
 homeIntroContent = """
 """
-
 # Collection to display on home
 homeCollectionTitle = ''
 homeCollection = 'posts'

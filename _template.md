@@ -1,11 +1,13 @@
 ---
 title: ""
-date: "2023-11-12"
+date: "2025-03-08"
 summary: ""
 description: ""
 tags: [""]
-toc: true
-readTime: true
 showTags: true
+hidePagination: false
+math: false
+toc: true
+readTime: false
 hideBackToTop: true
 ---
