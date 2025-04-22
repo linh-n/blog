@@ -1,7 +1,22 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .header-title {
   font-size: 1.2em;
 }
 
 .single-tags a {
   text-transform: lowercase;
+}
+
+code {
+  font-size: 0.7em;
+}
+
+.img-container {
+  border-radius: 1em;
+  overflow: hidden;
 }

@@ -1,6 +1,6 @@
 baseURL = 'https://linh.nguyen.be'
 languageCode = 'en-us'
-title = "linh nguyen's blog"
+title = "linh's journal"
 theme = 'typo'
 
 [taxonomies]
@@ -8,7 +8,7 @@ tag = 'tags'
 
 
 [params]
-description = "A Tech Blog"
+description = "A place to share my thoughts and ideas."
 theme = 'auto'
 colorPalette = 'base16-ocean'
 hideHeader = false
@@ -20,7 +20,7 @@ homeIntroContent = """
 """
 # Collection to display on home
 homeCollectionTitle = ''
-homeCollection = 'posts'
+homeCollection = 'resources'
 
 # Lists parameters
 paginationSize = 100
@@ -33,7 +33,7 @@ enabled = false
 
 # Main menu pages
 [[params.menu]]
-name = "home"
+name = "resources"
 url = "/"
 
 [[params.menu]]
@@ -43,4 +43,4 @@ url = "/about"
 # Syntax highlight on code blocks
 [markup]
 [markup.highlight]
-style = 'algol'
+style = 'algol_nu'
