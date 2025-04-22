@@ -4,8 +4,16 @@
   align-items: center;
 }
 
+.header p {
+  margin: 0;
+}
+
+.header p a {
+  padding: 16px 8px;
+}
+
 .header .flex {
-  gap: 16px;
+  gap: 8px;
 }
 
 .header-title {
