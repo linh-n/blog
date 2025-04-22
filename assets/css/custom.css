@@ -10,11 +10,11 @@
 }
 
 .header p a {
-  padding: 16px 8px;
+  padding: 1rem 0.5rem;
 }
 
 .header .flex {
-  gap: 8px;
+  gap:  0.5rem;
 }
 
 .header-title {
@@ -22,7 +22,7 @@
 }
 
 .post-line {
-  margin-bottom: 24px;
+  margin-bottom: 1.5rem;
 }
 
 time {
@@ -31,7 +31,7 @@ time {
 }
 
 .single-tags {
-  margin-bottom: 32px;
+  margin-bottom: 2rem;
   font-size: 0.9em;
   opacity: 0.6;
 }
@@ -45,7 +45,7 @@ code {
 }
 
 .img-container {
-  border-radius: 1em;
+  border-radius: 0.7rem;
   overflow: hidden;
 }
 
