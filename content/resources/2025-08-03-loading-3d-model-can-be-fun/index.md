@@ -225,7 +225,7 @@ How much reduction needed will depend on your use case so I'll leave it to you t
   for (let i = 0; i < float32Array.length; i++) {
     // Store full vertices for the final model
 
-    // Keep only 1 in every POINTS_REDUCTION_RATIO vertices for rendering during loading
+    // Keep only 1 in every *reductionRatio* vertices for rendering during loading
     if (index % 3 === 0 && Math.floor(index / 3) % reductionRatio === 0) {
       reducedPoints[reducedIndex++] = float32Array[i] ?? 0;
       reducedPoints[reducedIndex++] = float32Array[i + 1] ?? 0;
