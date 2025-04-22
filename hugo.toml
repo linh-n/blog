@@ -6,7 +6,6 @@ theme = 'typo'
 [taxonomies]
 tag = 'tags'
 
-
 [params]
 description = "A place to share my thoughts and ideas."
 theme = 'auto'
@@ -15,24 +14,19 @@ hideHeader = false
 showFooter = true
 footerContent = "have some thoughts? contact me at <a href='mailto:linh@nguyen.be'>linh@nguyen.be</a>"
 
-# Intro on main page, content is markdown
 homeIntroTitle = ''
 homeIntroContent = """
 """
-# Collection to display on home
 homeCollectionTitle = ''
 homeCollection = 'resources'
 
-# Lists parameters
 paginationSize = 100
 listSummaries = true
 listDateFormat = '2 Jan 2006'
 
-# Breadcrumbs
 [params.breadcrumbs]
 enabled = false
 
-# Main menu pages
 [[params.menu]]
 name = "resources"
 url = "/"
@@ -41,7 +35,15 @@ url = "/"
 name = "about"
 url = "/about"
 
-# Syntax highlight on code blocks
 [markup]
 [markup.highlight]
 style = 'algol_nu'
+
+[params.giscus]
+enable = true
+repo = "linh-n/blog"
+repoid = "R_kgDOOdJ5-g"
+category = "Announcements"
+categoryid = "DIC_kwDOOdJ5-s4CpWrZ"
+mapping = "pathname"
+theme = "preferred_color_scheme"

@@ -7,6 +7,7 @@ toc: false
 math: false
 readTime: false
 hideBackToTop: true
+disableComment: true
 ---
 
 I'm Linh Nguyen, an enthusiastic developer who is always hungry for knowledge and loves to learn new things. I created this place to share my thoughts and ideas along the journey.

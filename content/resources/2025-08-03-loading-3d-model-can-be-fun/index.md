@@ -1,7 +1,7 @@
 ---
 title: "Loading 3D models can be fun"
 date: "2025-03-08"
-summary: "An approach to make sitting and waiting for a 3D model to download more fun by rendering as data is being downloaded."
+summary: "An approach to enhance the user experience during 3D model downloads by progressively rendering the model as data is received."
 description: "Progressive loading of 3D models to improve user experience."
 tags: ["3d", "threejs"]
 showTags: true
