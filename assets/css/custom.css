@@ -20,8 +20,19 @@
   font-size: 1.2em;
 }
 
+.post-line {
+  margin-bottom: 24px;
+}
+
+time {
+  font-family: var(--font-mono);
+  font-size: small;
+}
+
 .single-tags {
   margin-bottom: 32px;
+  font-size: 0.9em;
+  opacity: 0.5;
 }
 
 .single-tags a {
@@ -35,4 +46,14 @@ code {
 .img-container {
   border-radius: 1em;
   overflow: hidden;
+}
+
+@media screen and (max-width: 600px) {
+  .post-line {
+    flex-wrap: wrap;
+  }
+
+  .line-date {
+    text-align: left;
+  }
 }
