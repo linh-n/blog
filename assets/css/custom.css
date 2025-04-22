@@ -4,8 +4,16 @@
   align-items: center;
 }
 
+.header .flex {
+  gap: 16px;
+}
+
 .header-title {
   font-size: 1.2em;
+}
+
+.single-tags {
+  margin-bottom: 32px;
 }
 
 .single-tags a {

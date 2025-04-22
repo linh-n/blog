@@ -12,7 +12,8 @@ description = "A place to share my thoughts and ideas."
 theme = 'auto'
 colorPalette = 'base16-ocean'
 hideHeader = false
-showFooter = false
+showFooter = true
+footerContent = "have some thoughts? contact me at <a href='mailto:linh@nguyen.be'>linh@nguyen.be</a>"
 
 # Intro on main page, content is markdown
 homeIntroTitle = ''

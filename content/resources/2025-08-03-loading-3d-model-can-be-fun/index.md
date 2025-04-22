@@ -5,7 +5,7 @@ summary: "An approach to make sitting and waiting for a 3D model to download mor
 description: "Progressive loading of 3D models to improve user experience."
 tags: ["3d", "threejs"]
 showTags: true
-toc: true
+toc: false
 math: false
 readTime: false
 hideBackToTop: true
@@ -243,6 +243,8 @@ That's it for the simple approach. But if you want to take it a step further, yo
 &nbsp;
 
 ![Advanced rendering](images/advanced.gif#full "Advanced rendering")
+
+The following code block is an implementation of the custom shader, and it concludes the article. Thank you for reading and I hope you can get something out of this long article.
 
 ```ts
 import * as THREE from "three";
