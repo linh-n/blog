@@ -11,14 +11,14 @@ description = "A place to share my thoughts and ideas."
 theme = 'auto'
 colorPalette = 'base16-ocean'
 hideHeader = false
-showFooter = true
+showFooter = false
 footerContent = "have some thoughts? contact me at <a href='mailto:linh@nguyen.be'>linh@nguyen.be</a>"
 
 homeIntroTitle = ''
 homeIntroContent = """
 """
 homeCollectionTitle = ''
-homeCollection = 'resources'
+homeCollection = 'articles'
 
 paginationSize = 100
 listSummaries = true
@@ -28,7 +28,7 @@ listDateFormat = '2 Jan 2006'
 enabled = false
 
 [[params.menu]]
-name = "resources"
+name = "articles"
 url = "/"
 
 [[params.menu]]
