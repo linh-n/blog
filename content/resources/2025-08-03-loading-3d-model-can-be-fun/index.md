@@ -244,7 +244,7 @@ That's it for the simple approach. But if you want to take it a step further, yo
 
 ![Advanced rendering](images/advanced.gif#full "Advanced rendering")
 
-The following code block is an implementation of the custom shader, and it concludes the article. Thank you for reading and I hope you can get something out of this long article.
+The following code block is an implementation of the custom shader, and please beware that I was using a z-up system instead of three.js's default y-up. This concludes the article, thank you for reading and I hope you can get something out of this long article.
 
 ```ts
 import * as THREE from "three";
