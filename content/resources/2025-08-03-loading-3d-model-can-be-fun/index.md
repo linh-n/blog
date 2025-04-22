@@ -246,7 +246,7 @@ That's it for the simple approach. But if you want to take it a step further, yo
 
 The following code block is an implementation of the custom shader, and please beware that I was using a z-up system instead of three.js's default y-up. This concludes the article, thank you for reading and I hope you can get something out of this long article.
 
-```ts
+```glsl
 import * as THREE from "three";
 
 const pointsVertexShader = /* glsl */ `
