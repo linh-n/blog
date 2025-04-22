@@ -1,7 +1,7 @@
 ---
 title: "Hi, there"
 summary: ""
-description: ""
+description: "Short introduction about me"
 showTags: true
 toc: false
 math: false

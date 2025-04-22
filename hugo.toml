@@ -1,7 +1,9 @@
 baseURL = 'https://linh.nguyen.be'
-languageCode = 'en-us'
+languageCode = 'en'
 title = "linh's journal"
 theme = 'typo'
+capitalizeListTitles = false
+disableHugoGeneratorInject = true
 
 [taxonomies]
 tag = 'tags'
