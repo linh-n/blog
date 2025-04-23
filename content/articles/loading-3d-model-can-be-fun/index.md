@@ -8,7 +8,7 @@ showTags: true
 toc: false
 math: false
 readTime: false
-hideBackToTop: true
+hideBackToTop: false
 ---
 
 ![Loading progress](images/preview.gif#full "Demo of loading progress")
