@@ -25,6 +25,10 @@ Moreover, we can't use/watch those navigation hooks because the states only upda
 
 ## Finding a solution
 
+### Suspense
+
+All these features [`Suspense`](https://react.dev/reference/react/Suspense) and [`loading.js`](https://nextjs.org/docs/app/building-your-application/routing/loading-ui-and-streaming) are great, but they don't solve the problem of the link itself not being in the active state and current content is already stale. They only show up when the navigation has *already* happened to to help with the loading state of the new page.
+
 ### New hook?
 
 Next JS team is very aware of this problem and in the recent release of 15.3, they introduced a new hook called [`useLinkStatus`](https://nextjs.org/blog/next-15-3#uselinkstatus), but I think it is not enough. The hook is designed to provide a way to track the status of a link, but only to the link itself, since it can only be used in the context of a link, so the most you can do is to show some kind of spinner inside the link itself.
