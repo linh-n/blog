@@ -27,7 +27,7 @@ Moreover, we can't use/watch those navigation hooks because the states only upda
 
 ### Suspense
 
-All these features [`Suspense`](https://react.dev/reference/react/Suspense) and [`loading.js`](https://nextjs.org/docs/app/building-your-application/routing/loading-ui-and-streaming) are great, but they don't solve the problem of the link itself not being in the active state and current content is already stale. They only show up when the navigation has *already* happened to to help with the loading state of the new page.
+All these features [`Suspense`](https://react.dev/reference/react/Suspense) and [`loading.js`](https://nextjs.org/docs/app/building-your-application/routing/loading-ui-and-streaming) are great, but they don't solve the problem of the link itself not being in the active state and current content is already stale. They only help with the loading state of the new page.
 
 ### New hook?
 
