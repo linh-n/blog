@@ -3,7 +3,7 @@ title: "Loading 3D models can be fun"
 date: "2025-03-08"
 summary: "An approach to enhance the user experience during 3D model downloads by progressively rendering the model as data is received."
 description: "Progressive loading of 3D models to improve user experience."
-tags: ["3d", "threejs"]
+tags: ["3d", "threejs", "typescript"]
 showTags: true
 toc: false
 math: false
@@ -22,6 +22,8 @@ Sample code is written in TypeScript and rendered with Three.js, but the concept
 ### Why?
 
 The main reason for this is to make the user experience more enjoyable. Waiting for a 3D model to download can be boring, and by rendering the model as it is being downloaded, we can make the waiting time more engaging.
+
+Other solutions do exist, such as [Level of Detail](https://threejs.org/docs/#api/en/objects/LOD), [pop buffer](https://github.com/thibauts/pop-buffer) or [Nexus](https://vcg.isti.cnr.it/vcgtools/nexus/), but all of them actually increases the time to load the full model.
 
 ### How?
 
@@ -49,7 +51,7 @@ So for example, if we have 3 vertices with coordinates of `{ x: 1.0, y: 2.0, z: 
 
 ## Data transfer
 
-3D models are usually stored in binary files (.stl, .obj, .fbx, etc.) which are not very suitable for streaming. So you can either parse the whole file on the server at request time and send the data in the format described above, or you can process the file beforehand and store the pre-processed and stream the data as-is when requested. For larger files, the second option is preferred as it will save processing time and resource on the server.
+3D models are usually stored in binary files (.stl, .obj, .fbx, etc.) which are not very suitable for streaming. So you can either parse the whole file on the server at request time and send the data in the format described above, or you can process the file beforehand and store the pre-processed and stream the data as-is when requested. For larger files, the second option is preferred as it will save processing time and resource on the server. Piping the data stream to a compression stream is recommended to reduce the size of the data being sent over the network, although it can be harsh on server CPU. 
 
 After preparing the array of Float32, we need to convert it into a `ReadableStream<Uint8Array>` and send it with `Transfer-Encoding: chunked` header. There will be high chance that the data will be broken in the middle. Let's take the previous example and assume that the data is being sent in 4 chunks.
 
