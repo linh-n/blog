@@ -3,7 +3,7 @@ title: "Loading 3D models can be fun"
 date: "2025-03-08"
 summary: "An approach to enhance the user experience during 3D model downloads by progressively rendering the model as data is received."
 description: "Progressive loading of 3D models to improve user experience."
-tags: ["3d", "threejs", "typescript"]
+tags: ["3d", "threejs", "typescript", "shader"]
 showTags: true
 toc: false
 math: false

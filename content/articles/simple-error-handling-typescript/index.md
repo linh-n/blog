@@ -1,6 +1,6 @@
 ---
 title: "A simple error handling method in TypeScript"
-date: "2025-04-23"
+date: "2025-04-21"
 summary: "When it comes to error handling in TypeScript, throwing errors is not the best approach, especially where errors are expected. Let's explore a better alternative."
 description: "Simple yet effective error handling in TypeScript."
 tags: ["typescript"]
