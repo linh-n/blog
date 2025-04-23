@@ -152,6 +152,8 @@ const { optimisticPathname, setOptimisticPathname } = useOptimisticNavigation();
 </Link>
 ```
 
+If you use `useRouter` to navigate, you can call `setOptimisticPathname` directly.
+
 ### 3. The loading state
 
 In your other components that need to show the loading state, you can use the `isNavigating` state to show the loading state. For example, you can use it to fade out the content and show a spinner.
