@@ -14,7 +14,7 @@ theme = 'auto'
 colorPalette = 'base16-ocean'
 hideHeader = false
 showFooter = false
-footerContent = "have some thoughts? contact me at <a href='mailto:linh@nguyen.be'>linh@nguyen.be</a>"
+footerContent = "The content is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) and the code provided is licensed under [MIT License](/license/mit)."
 
 homeIntroTitle = ''
 homeIntroContent = """
@@ -40,6 +40,11 @@ url = "/about"
 [markup]
 [markup.highlight]
 style = 'bw'
+[markup.goldmark]
+[markup.goldmark.parser]
+[markup.goldmark.parser.attribute]
+block = true
+title = true
 
 [params.giscus]
 enable = true

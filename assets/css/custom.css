@@ -49,6 +49,11 @@ pre code {
   overflow: hidden;
 }
 
+.license {
+  font-size: 0.9em;
+  font-style: italic;
+}
+
 @media screen and (max-width: 600px) {
   .post-line {
     flex-wrap: wrap;
