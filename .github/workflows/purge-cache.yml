@@ -5,6 +5,9 @@ jobs:
   purge:
     runs-on: ubuntu-latest
     steps:
+    - name: Wait for deployment
+      run: sleep 120s
+      shell: bash
     - name: Purge cache
       uses: jakejarvis/cloudflare-purge-action@master
       env:
