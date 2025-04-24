@@ -1,20 +1,12 @@
-<a
-  {{ if or (strings.HasPrefix .Destination `http`) (strings.HasPrefix .Destination `#`) (strings.HasPrefix .Destination `/`) }}
-    href = "{{ .Destination | safeURL }}"
-  {{ else if strings.HasPrefix .Destination `mailto` }}
-    href = "mailto:{{ .Text }}"
-  {{ end }}
-
+<a 
+  href="{{ .Destination | safeURL }}"
   {{ with .Title}}
-    title = "{{ . }}"
+    title="{{ . }}"
   {{ end }}
-
+  
   {{ if strings.HasPrefix .Destination "http" }}
-    target = "_blank"
-    rel = "nofollow noopener noreferrer"
+    target="_blank" rel="noopener"
   {{ end }}>
-
-  <span>
-    {{ .Text }}
-  </span>
+  
+  {{ .Text | safeHTML }}
 </a>
