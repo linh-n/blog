@@ -47,7 +47,7 @@ jobs:
       - name: Install wrangler
         run: |
           # Check if wrangler version is already installed
-          installed_version=$(npx --no-install wrangler --version || true)
+          installed_version=$(npx --yes --no-install wrangler --version || true)
           
           # If the installed version does not match the specified version, install the correct version
           if [[ "$installed_version" != "${{ env.WRANGLER_VERSION }}" ]]; then
