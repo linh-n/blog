@@ -82,7 +82,7 @@ jobs:
           echo "Fetching all deployments..."
           DEPLOYMENTS=$(curl -s -X GET \
             -H "Authorization: Bearer $CF_API_TOKEN" \
-            "https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_ID/pages/projects/$CF_PAGES_PROJECT_NAME/deployments?per_page=100")
+            "https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_ID/pages/projects/$CF_PAGES_PROJECT_NAME/deployments?page=1&per_page=20")
 
           # echo deployments for debugging
           echo "$DEPLOYMENTS" | jq '.'
