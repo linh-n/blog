@@ -1,5 +1,4 @@
 name: Deploy to Cloudflare Pages
-
 on:
   push:
     branches:
@@ -7,15 +6,14 @@ on:
       - dev
 
 jobs:
-  build:
-    name: Build
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     env:
       HUGO_CACHE_DIR: /tmp/hugo_cache
-
-    outputs:
-      artifact-name: ${{ steps.upload.outputs.artifact-name }}
-
+      WRANGLER_VERSION: 3.90.0
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -38,28 +36,8 @@ jobs:
       - name: Build
         run: hugo --minify
 
-      - name: Upload build artifact
-        id: upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: public
-          path: public
-
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    needs: build
-    env:
-      WRANGLER_VERSION: 3.90.0
-
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: public
-          path: public
-
       - name: Cache wrangler
+        id: wrangler-cache
         uses: actions/cache@v4
         with:
           path: ~/.npm
@@ -68,9 +46,11 @@ jobs:
             wrangler-${{ runner.os }}-${{ env.WRANGLER_VERSION }}-
 
       - name: Install wrangler
-        run: npm install wrangler@${{ env.WRANGLER_VERSION }}
+        run: |
+          echo "Installing wrangler version ${{ env.WRANGLER_VERSION }}"
+          npm install wrangler@${{ env.WRANGLER_VERSION }}
 
-      - name: Deploy to Cloudflare
+      - name: Deploy to cloudflare
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_TOKEN }}
