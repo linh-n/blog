@@ -72,7 +72,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
-      - name: Wait for deployment to finish
+      - name: Wait for cache purge
         run: sleep 5
         
       - name: Fetch sitemap and warm up cache
@@ -82,9 +82,13 @@ jobs:
           SITEMAP=$(curl -s "${{ vars.SITE_URL }}/sitemap.xml")
           # Extract URLs
           URLS=$(echo "$SITEMAP" | grep -oP '(?<=<loc>).*?(?=</loc>)')
-          # Request each URL
+          # Request each URL in parallel (fire and forget)
           for URL in $URLS; do
             echo "Warming up: $URL"
-            curl -s -o /dev/null -w "%{http_code}\n" "$URL"
+            curl -s -o /dev/null "$URL" &
           done
+          
+          # Wait for all background curl processes to finish
+          echo "Waiting for all requests to complete..."
+          wait
           echo "Cache warm-up completed"
