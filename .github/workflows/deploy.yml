@@ -45,17 +45,10 @@ jobs:
             wrangler-${{ runner.os }}-${{ env.WRANGLER_VERSION }}-
 
       - name: Install wrangler
+        if: steps.wrangler-cache.outputs.cache-hit != 'true'
         run: |
-          # Check if wrangler version is already installed
-          installed_version=$(npx --yes --no-install wrangler --version || true)
-          
-          # If the installed version does not match the specified version, install the correct version
-          if [[ "$installed_version" != "${{ env.WRANGLER_VERSION }}" ]]; then
-            echo "Installing wrangler version ${{ env.WRANGLER_VERSION }}"
-            npm install wrangler@${{ env.WRANGLER_VERSION }}
-          else
-            echo "Wrangler version $installed_version already installed"
-          fi
+          echo "Installing wrangler version ${{ env.WRANGLER_VERSION }}"
+          npm install wrangler@${{ env.WRANGLER_VERSION }}
 
       - name: Deploy to cloudflare
         uses: cloudflare/wrangler-action@v3
