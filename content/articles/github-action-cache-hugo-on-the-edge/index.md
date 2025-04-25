@@ -13,24 +13,6 @@ hideBackToTop: false
 
 If you are like me, who obsesses with performance, you probably want enable Edge Caching for your static site. Hope you find something useful in this article. I use this pipeline for this website as well.
 
-The diagram below shows the sequence of this action:
-
-```mermaid
-sequenceDiagram
-    participant G as Github
-    participant A as Github Action
-    participant H as Hugo
-    participant C as Cloudflare Pages
-    participant P as Cloudflare Cache
-
-    G->>A: Push to main branch
-    A->>H: Build Hugo
-    H->>A: Static files
-    A->>C: Deploy
-    C->>A: Deployment success
-    A->>P: Purge
-```
-
 Let's get directly to the action.
 
 ```yaml

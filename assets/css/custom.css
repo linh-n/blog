@@ -44,6 +44,21 @@ pre code {
   font-size: 0.7em;
 }
 
+
+.external-link {
+  &::after {
+    content: "";
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    position: relative;
+    top: 2px;
+    background-color: currentColor;
+    mask-image: url(/images/external-link.svg);
+    opacity: 0.6;
+  }
+}
+
 .img-container {
   border-radius: 0.7rem;
   overflow: hidden;
