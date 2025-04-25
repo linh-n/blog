@@ -42,7 +42,7 @@ jobs:
           command: >
             pages deploy public --project-name=blog
             ${{ github.ref == 'refs/heads/dev' && '--branch=dev' || '' }}
-          
+
       - name: Get changed content files
         id: changed_files
         run: |
@@ -53,19 +53,32 @@ jobs:
             BASE_URL="https://linh.nguyen.be"
           fi
 
-          # Get list of changed content files
           changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^content/' || true)
 
           urls=""
+          root_included=false
+
           while IFS= read -r file; do
+            # Strip prefix and extension
             path=${file#content/}
-            path=${path%%.*}
+            path_no_ext=${path%%.*}
+            dirname=$(dirname "$path_no_ext")
+            basename=$(basename "$path_no_ext")
 
             # Only add if path is non-empty
             if [[ -n "$path" ]]; then
-              urls="${urls}\"$BASE_URL/$path/\","
-              urls="${urls}\"$BASE_URL/$path/sitemap.xml\","
+              urls="${urls}\"$BASE_URL/\","
+              urls="${urls}\"$BASE_URL/sitemap.xml\","
             fi
+
+            # Handle about.md → /about
+            if [[ "$basename" == "index" || "$basename" == "_index" ]]; then
+              clean_path="$BASE_URL/$dirname"
+            else
+              clean_path="$BASE_URL/$path_no_ext"
+            fi
+
+            urls="${urls}\"$clean_path\","
           done <<< "$changed"
 
           urls="[${urls%,}]"
@@ -73,7 +86,7 @@ jobs:
           echo "CHANGED_PATHS=$urls" >> $GITHUB_OUTPUT
 
           echo "🧹 Purging the following URLs:"
-          echo "$urls"
+          echo "$urls"          
 
       - name: Cache purge
         uses: jakejarvis/cloudflare-purge-action@master
