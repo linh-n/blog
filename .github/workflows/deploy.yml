@@ -66,45 +66,6 @@ jobs:
             pages deploy public --project-name=blog
             ${{ github.ref == 'refs/heads/dev' && '--branch=dev' || '' }}
 
-      - name: Delete old deployments
-        run: |
-          BRANCH_NAME=${GITHUB_REF##*/}
-          
-          # Set number of deployments to keep depending on the branch
-          if [ "$BRANCH_NAME" = "master" ]; then
-            KEEP_LIMIT=10
-          elif [ "$BRANCH_NAME" = "dev" ]; then
-            KEEP_LIMIT=2
-          else
-            echo "No deployment cleanup rules for branch: $BRANCH_NAME"
-            exit 0
-          fi
-
-          echo "Keeping $KEEP_LIMIT deployments for branch: $BRANCH_NAME"
-
-          # Fetch deployments (up to 100) for this branch
-          deployments=$(curl -s -X GET "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT }}/pages/projects/blog/deployments?branch=$BRANCH_NAME&per_page=100" \
-            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_TOKEN }}" \
-            -H "Content-Type: application/json")
-
-          # Extract deployment IDs beyond the KEEP_LIMIT
-          deployment_ids=$(echo "$deployments" | jq -r --argjson keep "$KEEP_LIMIT" '.result | sort_by(.created_on) | reverse | .[$keep:][]?.id')
-
-          if [ -z "$deployment_ids" ]; then
-            echo "No old deployments to delete."
-            exit 0
-          fi
-
-          # Delete each old deployment
-          for id in $deployment_ids; do
-            echo "Deleting deployment $id"
-            curl -s -X DELETE "https://api.cloudflare.com/client/v4/accounts/${{ secrets.CLOUDFLARE_ACCOUNT }}/pages/projects/blog/deployments/$id" \
-              -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_TOKEN }}" \
-              -H "Content-Type: application/json"
-          done
-        env:
-          GITHUB_REF: ${{ github.ref }}
-
       - name: Cloudflare cache purge
         if: github.ref == 'refs/heads/master'
         uses: jakejarvis/cloudflare-purge-action@master
