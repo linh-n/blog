@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HUGO_CACHEDIR: /tmp/hugo_cache
+      WRANGLER_VERSION: 3.90.0
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
@@ -39,17 +40,24 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.npm
-          key: wrangler-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          key: wrangler-${{ runner.os }}-${{ env.WRANGLER_VERSION }}
           restore-keys: |
-            wrangler-${{ runner.os }}-
+            wrangler-${{ runner.os }}-${{ env.WRANGLER_VERSION }}-
 
       - name: Install wrangler
         run: |
-          if [ ! -f ~/.npm/global/bin/wrangler ]; then
-            npm install wrangler@3.90.0
+          # Check if wrangler version is already installed
+          installed_version=$(npx --no-install wrangler --version || true)
+          
+          # If the installed version does not match the specified version, install the correct version
+          if [[ "$installed_version" != "${{ env.WRANGLER_VERSION }}" ]]; then
+            echo "Installing wrangler version ${{ env.WRANGLER_VERSION }}"
+            npm install wrangler@${{ env.WRANGLER_VERSION }}
+          else
+            echo "Wrangler version $installed_version already installed"
           fi
 
-      - name: Deploy
+      - name: Deploy to cloudflare
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_TOKEN }}
@@ -58,7 +66,7 @@ jobs:
             pages deploy public --project-name=blog
             ${{ github.ref == 'refs/heads/dev' && '--branch=dev' || '' }}
 
-      - name: Cache purge
+      - name: Cloudflare cache purge
         if: github.ref == 'refs/heads/master'
         uses: jakejarvis/cloudflare-purge-action@master
         env:
