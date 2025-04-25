@@ -12,7 +12,7 @@ jobs:
     env:
       HUGO_CACHE_DIR: /tmp/hugo_cache
       WRANGLER_VERSION: 3.90.0
-      DEPLOY_BRANCH: ${{ github.ref == 'refs/heads/master' && 'production' || 'preview' }}
+      DEPLOY_BRANCH: ${{ github.ref == 'refs/heads/master' && 'master' || 'dev' }}
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
