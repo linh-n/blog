@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - dev
 
 jobs:
   deploy:
@@ -14,8 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: true  # Fetch Hugo themes (true OR recursive)
-          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+          submodules: true
+          fetch-depth: 0
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
@@ -38,11 +39,41 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT }}
-          command: pages deploy public --project-name=blog --branch=dev
+          command: >
+            pages deploy public --project-name=blog
+            ${{ github.ref == 'refs/heads/dev' && '--branch=dev' || '' }}
           
+      - name: Get changed content files
+        id: changed_files
+        run: |
+          # Set base URL based on branch
+          if [[ "${GITHUB_REF}" == "refs/heads/dev" ]]; then
+            BASE_URL="https://dev.nguyen.be"
+          else
+            BASE_URL="https://linh.nguyen.be"
+          fi
+
+          # Get list of changed content files
+          changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^content/' || true)
+          
+          urls=""
+          while IFS= read -r file; do
+            path=${file#content/}       # Remove 'content/' prefix
+            path=${path%%.*}            # Remove extension
+
+            # Add all relevant URLs
+            urls="${urls}\"$BASE_URL/$path/\","
+            urls="${urls}\"$BASE_URL/$path/index.html\","
+            urls="${urls}\"$BASE_URL/$path/index.xml\","
+          done <<< "$changed"
+
+          # Final JSON array string
+          urls="[${urls%,}]"
+          echo "CHANGED_PATHS=$urls" >> $GITHUB_OUTPUT
+
       - name: Cache purge
         uses: jakejarvis/cloudflare-purge-action@master
         env:
           CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
-
+          PURGE_URLS: ${{ steps.changed_files.outputs.CHANGED_PATHS }}
