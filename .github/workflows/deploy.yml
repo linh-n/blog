@@ -58,7 +58,7 @@ jobs:
           fi
 
       - name: Deploy to cloudflare
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v${{ env.WRANGLER_VERSION }}
         with:
           apiToken: ${{ secrets.CLOUDFLARE_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT }}
