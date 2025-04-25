@@ -71,6 +71,9 @@ jobs:
           urls="[${urls%,}]"
           echo "CHANGED_PATHS=$urls" >> $GITHUB_OUTPUT
 
+          echo "🧹 Purging the following URLs:"
+          echo "$urls"
+
       - name: Cache purge
         uses: jakejarvis/cloudflare-purge-action@master
         env:
