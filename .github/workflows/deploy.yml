@@ -46,7 +46,7 @@ jobs:
       - name: Install wrangler
         run: |
           if [ ! -f ~/.npm/global/bin/wrangler ]; then
-            npm install -g @cloudflare/wrangler
+            npm install wrangler@3.90.0
           fi
 
       - name: Deploy
