@@ -58,7 +58,7 @@ jobs:
           command: >
             pages deploy public --project-name=blog
             ${{ github.ref == 'refs/heads/master' && '--branch=master' || '--branch=dev' }}
-            ${ github.ref == 'refs/heads/master' && '--env=production' || '--env=preview' }}
+            ${{ github.ref == 'refs/heads/master' && '--env=production' || '--env=preview' }}
 
       - name: Cloudflare cache purge
         if: github.ref == 'refs/heads/master'
