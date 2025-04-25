@@ -21,7 +21,7 @@ Try to search for something like "next js slow navigation" and you will find a l
 
 The problem lies in the fact that the App router relies on server-side rendering (SSR) and static site generation (SSG) to deliver content to the client. Normally the change of pages is quite fast, but as Next JS has to wait for the new page to be rendered on the server, so in unideal situations, depending on how fast the server processes the request, network latency and speed, there is a period of limbo in between two pages.
 
-Moreover, we can't use/watch those navigation hooks because the states only update **_after_** the navigation is complete.
+Moreover, we can't use/watch the navigation hooks (`usePathname`, `useSearchParams` etc.) because the states only update **_after_** the navigation is complete.
 
 ## Finding a solution
 
