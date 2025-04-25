@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy to Cloudflare Pages
 on:
   push:
     branches:
@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      HUGO_CACHEDIR: /tmp/hugo_cache
+      HUGO_CACHE_DIR: /tmp/hugo_cache
       WRANGLER_VERSION: 3.90.0
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
@@ -27,7 +27,7 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          path: ${{ env.HUGO_CACHEDIR }}
+          path: ${{ env.HUGO_CACHE_DIR }}
           key: ${{ runner.os }}-hugomod-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-hugomod-
