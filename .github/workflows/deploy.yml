@@ -12,8 +12,11 @@ jobs:
     env:
       HUGO_CACHE_DIR: /tmp/hugo_cache
       WRANGLER_VERSION: 3.90.0
+      DEPLOY_BRANCH: ${{ github.ref == 'refs/heads/master' && 'master' || 'dev' }}
+      DEPLOY_ENV: ${{ github.ref == 'refs/heads/master' && 'production' || 'preview' }}
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,6 +39,11 @@ jobs:
       - name: Build
         run: hugo --minify
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
       - name: Cache wrangler
         id: wrangler-cache
         uses: actions/cache@v4
@@ -55,10 +63,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT }}
-          command: >
-            pages deploy public --project-name=blog
-            ${{ github.ref == 'refs/heads/master' && '--branch=master' || '--branch=dev' }}
-            ${{ github.ref == 'refs/heads/master' && '--env=production' || '--env=preview' }}
+          command: pages deploy public --project-name=blog --branch=${{ env.DEPLOY_BRANCH }} --env=${{ env.DEPLOY_ENV }}
 
       - name: Cloudflare cache purge
         if: github.ref == 'refs/heads/master'
