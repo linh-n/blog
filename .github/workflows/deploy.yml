@@ -82,13 +82,26 @@ jobs:
           SITEMAP=$(curl -s "${{ vars.SITE_URL }}/sitemap.xml")
           # Extract URLs
           URLS=$(echo "$SITEMAP" | grep -oP '(?<=<loc>).*?(?=</loc>)')
-          # Request each URL
+          # Request each URL with proper headers
           for URL in $URLS; do
-            echo "Warming up [0]: $URL"
-            curl -s -o /dev/null -w "%{http_code}\n" "$URL"
+            echo "Warming up: $URL"
+            # Use appropriate headers and check status
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+              -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" \
+              -H "Accept: text/html,application/xhtml+xml,application/xml" \
+              "$URL")
+            echo "Status: $STATUS"
+            # Add small delay to avoid rate limiting
+            sleep 0.5
           done
+          echo "First pass completed, running second pass to verify caching..."
+          sleep 5
+          # Second pass to check cache status
           for URL in $URLS; do
-            echo "Warming up [1]: $URL"
-            curl -s -o /dev/null -w "%{http_code}\n" "$URL"
+            echo "Checking cache for: $URL"
+            curl -s -I \
+              -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" \
+              -H "Accept: text/html,application/xhtml+xml,application/xml" \
+              "$URL" | grep -i "cf-cache-status"
           done
           echo "Cache warm-up completed"
