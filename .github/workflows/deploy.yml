@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HUGO_CACHEDIR: /tmp/hugo_cache
+      WRANGLER_VERSION: 3.90.0
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
@@ -31,13 +32,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-hugomod-
 
-      - name: Fetch latest Wrangler version
-        id: fetch-wrangler-version
-        run: |
-          echo "Fetching latest Wrangler version..."
-          WRANGLER_VERSION=$(npm show wrangler version)
-          echo "Latest Wrangler version: $WRANGLER_VERSION"
-          echo "WRANGLER_VERSION=$WRANGLER_VERSION" >> $GITHUB_ENV
+      - name: Build
+        run: hugo --minify
 
       - name: Cache wrangler
         id: wrangler-cache
@@ -46,11 +42,11 @@ jobs:
           path: ~/.npm
           key: wrangler-${{ runner.os }}-${{ env.WRANGLER_VERSION }}
           restore-keys: |
-            wrangler-${{ runner.os }}-
+            wrangler-${{ runner.os }}-${{ env.WRANGLER_VERSION }}-
 
       - name: Install wrangler
         run: |
-          echo "Installing Wrangler version ${{ env.WRANGLER_VERSION }}"
+          echo "Installing wrangler version ${{ env.WRANGLER_VERSION }}"
           npm install wrangler@${{ env.WRANGLER_VERSION }}
 
       - name: Deploy to cloudflare
