@@ -12,7 +12,6 @@ jobs:
     env:
       HUGO_CACHE_DIR: /tmp/hugo_cache
       WRANGLER_VERSION: 3.90.0
-      DEPLOY_BRANCH: ${{ github.ref == 'refs/heads/master' && 'master' || 'dev' }}
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
@@ -62,7 +61,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT }}
-          command: pages deploy public --project-name=blog --branch=${{ env.DEPLOY_BRANCH }}
+          command: pages deploy public --project-name=blog --branch=${{ github.ref_name }}
 
       - name: Cloudflare cache purge
         if: github.ref == 'refs/heads/master'
