@@ -1,4 +1,5 @@
 name: Deploy to Cloudflare Pages
+
 on:
   push:
     branches:
@@ -6,14 +7,15 @@ on:
       - dev
 
 jobs:
-  deploy:
-    name: Deploy
+  build:
+    name: Build
     runs-on: ubuntu-latest
     env:
       HUGO_CACHE_DIR: /tmp/hugo_cache
-      WRANGLER_VERSION: 3.90.0
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
+
+    outputs:
+      artifact-name: ${{ steps.upload.outputs.artifact-name }}
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,8 +38,28 @@ jobs:
       - name: Build
         run: hugo --minify
 
+      - name: Upload build artifact
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: public
+          path: public
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      WRANGLER_VERSION: 3.90.0
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: public
+          path: public
+
       - name: Cache wrangler
-        id: wrangler-cache
         uses: actions/cache@v4
         with:
           path: ~/.npm
@@ -46,11 +68,9 @@ jobs:
             wrangler-${{ runner.os }}-${{ env.WRANGLER_VERSION }}-
 
       - name: Install wrangler
-        run: |
-          echo "Installing wrangler version ${{ env.WRANGLER_VERSION }}"
-          npm install wrangler@${{ env.WRANGLER_VERSION }}
+        run: npm install wrangler@${{ env.WRANGLER_VERSION }}
 
-      - name: Deploy to cloudflare
+      - name: Deploy to Cloudflare
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_TOKEN }}
@@ -65,43 +85,3 @@ jobs:
         env:
           CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
-
-  warmup:
-    name: Warm up cache
-    needs: deploy
-    if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Wait for cache purge
-        run: sleep 5
-        
-      - name: Fetch sitemap and warm up cache
-        run: |
-          echo "Fetching sitemap.xml and warming up cache..."
-          # Download sitemap
-          SITEMAP=$(curl -s "${{ vars.SITE_URL }}/sitemap.xml")
-          # Extract URLs
-          URLS=$(echo "$SITEMAP" | grep -oP '(?<=<loc>).*?(?=</loc>)')
-          # Request each URL with proper headers
-          for URL in $URLS; do
-            echo "Warming up: $URL"
-            # Use appropriate headers and check status
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-              -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" \
-              -H "Accept: text/html,application/xhtml+xml,application/xml" \
-              "$URL")
-            echo "Status: $STATUS"
-            # Add small delay to avoid rate limiting
-            sleep 0.5
-          done
-          echo "First pass completed, running second pass to verify caching..."
-          sleep 5
-          # Second pass to check cache status
-          for URL in $URLS; do
-            echo "Checking cache for: $URL"
-            curl -s -I \
-              -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" \
-              -H "Accept: text/html,application/xhtml+xml,application/xml" \
-              "$URL" | grep -i "cf-cache-status"
-          done
-          echo "Cache warm-up completed"
