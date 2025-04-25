@@ -38,7 +38,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT }}
-          command: pages deploy public --project-name=blog --env=dev
+          command: pages deploy public --project-name=blog --branch=dev
           
       - name: Cache purge
         uses: jakejarvis/cloudflare-purge-action@master
