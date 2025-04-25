@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HUGO_CACHEDIR: /tmp/hugo_cache
-      WRANGLER_VERSION: 3.90.0
+      WRANGLER_VERSION: 4.13.1
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
