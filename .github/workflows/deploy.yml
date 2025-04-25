@@ -55,20 +55,21 @@ jobs:
 
           # Get list of changed content files
           changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^content/' || true)
-          
+
           urls=""
           while IFS= read -r file; do
-            path=${file#content/}       # Remove 'content/' prefix
-            path=${path%%.*}            # Remove extension
+            path=${file#content/}
+            path=${path%%.*}
 
-            # Add all relevant URLs
-            urls="${urls}\"$BASE_URL/$path/\","
-            urls="${urls}\"$BASE_URL/$path/index.html\","
-            urls="${urls}\"$BASE_URL/$path/index.xml\","
+            # Only add if path is non-empty
+            if [[ -n "$path" ]]; then
+              urls="${urls}\"$BASE_URL/$path/\","
+              urls="${urls}\"$BASE_URL/$path/sitemap.xml\","
+            fi
           done <<< "$changed"
 
-          # Final JSON array string
           urls="[${urls%,}]"
+
           echo "CHANGED_PATHS=$urls" >> $GITHUB_OUTPUT
 
           echo "🧹 Purging the following URLs:"
