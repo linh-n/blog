@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy to Cloudflare Pages
 on:
   push:
     branches:
@@ -7,9 +7,10 @@ on:
 
 jobs:
   deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     env:
-      HUGO_CACHEDIR: /tmp/hugo_cache
+      HUGO_CACHE_DIR: /tmp/hugo_cache
       WRANGLER_VERSION: 3.90.0
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
@@ -27,7 +28,7 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          path: ${{ env.HUGO_CACHEDIR }}
+          path: ${{ env.HUGO_CACHE_DIR }}
           key: ${{ runner.os }}-hugomod-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-hugomod-
@@ -46,16 +47,8 @@ jobs:
 
       - name: Install wrangler
         run: |
-          # Check if wrangler version is already installed
-          installed_version=$(npx --no-install wrangler --version || true)
-          
-          # If the installed version does not match the specified version, install the correct version
-          if [[ "$installed_version" != "${{ env.WRANGLER_VERSION }}" ]]; then
-            echo "Installing wrangler version ${{ env.WRANGLER_VERSION }}"
-            npm install wrangler@${{ env.WRANGLER_VERSION }}
-          else
-            echo "Wrangler version $installed_version already installed"
-          fi
+          echo "Installing wrangler version ${{ env.WRANGLER_VERSION }}"
+          npm install wrangler@${{ env.WRANGLER_VERSION }}
 
       - name: Deploy to cloudflare
         uses: cloudflare/wrangler-action@v3
