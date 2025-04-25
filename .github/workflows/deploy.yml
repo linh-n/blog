@@ -64,7 +64,7 @@ jobs:
           command: pages deploy public --project-name=blog --branch=${{ github.ref_name }}
 
       - name: Cloudflare cache purge
-        if: github.ref == 'refs/heads/master'
+        if: github.ref_name == 'master'
         uses: jakejarvis/cloudflare-purge-action@master
         env:
           CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
