@@ -70,3 +70,55 @@ jobs:
         env:
           CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
+
+      - name: Cleanup old deployments
+        env:
+          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT }}
+          CF_PAGES_PROJECT_NAME: blog
+        run: |
+          set -e
+
+          echo "Fetching all deployments..."
+          DEPLOYMENTS=$(curl -s -X GET \
+            -H "Authorization: Bearer $CF_API_TOKEN" \
+            "https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_ID/pages/projects/$CF_PAGES_PROJECT_NAME/deployments?per_page=100")
+
+          echo "$DEPLOYMENTS" | jq -e '.success' >/dev/null || {
+            echo "Failed to fetch deployments."
+            exit 1
+          }
+
+          # Parse deployments and group by branch
+          echo "$DEPLOYMENTS" | jq -r '.result[] | "\(.id) \(.deployment_trigger.metadata.branch) \(.created_on)"' |
+            sort -k3 -r |
+            awk '
+              {
+                id=$1; branch=$2;
+                if (branch == "master") {
+                  master[++m]=id
+                } else if (branch == "dev") {
+                  dev[++d]=id
+                }
+              }
+              END {
+                for (i = 4; i <= m; i++) {
+                  print master[i]
+                }
+                for (i = 2; i <= d; i++) {
+                  print dev[i]
+                }
+              }
+            ' > deployments_to_delete.txt
+
+          echo "Deployments to delete:"
+          cat deployments_to_delete.txt
+
+          while read -r id; do
+            echo "Deleting deployment $id"
+            curl -s -X DELETE \
+              -H "Authorization: Bearer $CF_API_TOKEN" \
+              "https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_ID/pages/projects/$CF_PAGES_PROJECT_NAME/deployments/$id?force=true" |
+              jq -e '.success' >/dev/null || echo "Failed to delete $id"
+            sleep 0.5
+          done < deployments_to_delete.txt
