@@ -1,5 +1,5 @@
 name: Deploy
-on: 
+on:
   push:
     branches:
       - master
@@ -34,6 +34,21 @@ jobs:
       - name: Build
         run: hugo --minify
 
+      - name: Cache wrangler
+        id: wrangler-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: wrangler-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            wrangler-${{ runner.os }}-
+
+      - name: Install wrangler
+        run: |
+          if [ ! -f ~/.npm/global/bin/wrangler ]; then
+            npm install -g @cloudflare/wrangler
+          fi
+
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
@@ -43,65 +58,9 @@ jobs:
             pages deploy public --project-name=blog
             ${{ github.ref == 'refs/heads/dev' && '--branch=dev' || '' }}
 
-      - name: Get changed content files
-        id: changed_files
-        run: |
-          # Set base URL based on branch
-          if [[ "${GITHUB_REF}" == "refs/heads/dev" ]]; then
-            BASE_URL="https://dev.nguyen.be"
-          else
-            BASE_URL="https://linh.nguyen.be"
-          fi
-
-          # Get list of changed files in the repository
-          changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} || true)
-          content_changes=$(echo "$changed" | grep '^content/' || true)
-          non_content_changes=$(echo "$changed" | grep -v '^content/' || true)
-
-          # If there are changes outside of the content dir, purge everything
-          if [[ -n "$non_content_changes" ]]; then
-            echo "Changes detected outside of /content. Purging everything."
-            # No PURGE_URLS environment variable will trigger a full purge
-            echo "Skipping PURGE_URLS, everything will be purged."
-            exit 0  # Skip the purge URLs step, Cloudflare will purge everything
-          fi
-
-          # Otherwise, handle content-only changes
-          urls=""
-
-          while IFS= read -r file; do
-            # Strip prefix and extension
-            path=${file#content/}
-            path_no_ext=${path%%.*}
-            dirname=$(dirname "$path_no_ext")
-            basename=$(basename "$path_no_ext")
-
-            # Handle root content changes (_index.md or index.md) or homepage
-            if [[ "$basename" == "index" || "$basename" == "_index" ]]; then
-              clean_path="$BASE_URL/$dirname"
-            else
-              clean_path="$BASE_URL/$path_no_ext"
-            fi
-
-            # Only add non-empty paths
-            if [[ -n "$clean_path" ]]; then
-              urls="${urls}\"$clean_path\","
-            fi
-          done <<< "$content_changes"
-
-          urls="${urls}\"$BASE_URL/\","
-          urls="${urls}\"$BASE_URL/sitemap.xml\","
-
-          # Finalize and format the URLs
-          urls="[${urls%,}]"
-          echo "CHANGED_PATHS=$urls" >> $GITHUB_OUTPUT
-
-          echo "🧹 Purging the following URLs:"
-          echo "$urls"       
-
       - name: Cache purge
+        if: github.ref == 'refs/heads/master'
         uses: jakejarvis/cloudflare-purge-action@master
         env:
           CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
-          PURGE_URLS: ${{ steps.changed_files.outputs.CHANGED_PATHS }}
