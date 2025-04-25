@@ -8,5 +8,5 @@
     target="_blank" rel="noopener"
   {{ end }}>
   
-  {{ .Text | safeHTML }}
+  {{ .Text | safeHTML }}{{ if strings.HasPrefix .Destination "http" }} ↗{{ end }}
 </a>
