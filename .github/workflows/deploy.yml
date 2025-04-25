@@ -84,9 +84,6 @@ jobs:
             -H "Authorization: Bearer $CF_API_TOKEN" \
             "https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT_ID/pages/projects/$CF_PAGES_PROJECT_NAME/deployments?page=1&per_page=20")
 
-          # echo deployments for debugging
-          echo "$DEPLOYMENTS" | jq '.'
-
           echo "$DEPLOYMENTS" | jq -e '.success' >/dev/null || {
             echo "Failed to fetch deployments."
             exit 1
@@ -105,7 +102,7 @@ jobs:
                 }
               }
               END {
-                for (i = 4; i <= m; i++) {
+                for (i = 8; i <= m; i++) {
                   print master[i]
                 }
                 for (i = 2; i <= d; i++) {
