@@ -14,7 +14,7 @@
 }
 
 .header .flex {
-  gap:  0.5rem;
+  gap: 0.5rem;
 }
 
 .header-title {
@@ -33,7 +33,6 @@ time {
 .single-tags {
   margin-top: 2rem;
   font-size: 0.9em;
-  opacity: 0.6;
 }
 
 .single-tags a {
@@ -43,7 +42,6 @@ time {
 pre code {
   font-size: 0.7em;
 }
-
 
 .external-link {
   &::after {
@@ -55,7 +53,7 @@ pre code {
     top: 2px;
     background-color: currentColor;
     mask-image: url(/images/external-link.svg);
-    opacity: 0.6;
+    opacity: 0.8;
   }
 }
 
