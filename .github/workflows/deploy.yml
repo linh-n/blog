@@ -124,21 +124,51 @@ jobs:
 
     
       - name: Warm up pages
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
         run: |
           set -e
-          curl -sSL "${{ vars.SITE_URL }}/sitemap.xml" | \
-            grep -oP '(?<=<loc>)[^<]+' | \
-            xargs -n1 -P10 curl -s -o /dev/null -w "%{http_code} %{url_effective}\n"
+
+          echo "Fetching sitemap from $SITE_URL/sitemap.xml"
+          sitemap=$(curl -s "$SITE_URL/sitemap.xml")
+
+          echo "Parsing URLs..."
+          mapfile -t urls < <(echo "$sitemap" | grep -oP '(?<=<loc>).*?(?=</loc>)')
+
+          echo "Found ${#urls[@]} URLs, warming up..."
+
+          printf "%s\n" "${urls[@]}" | xargs -n 1 -P 10 -I {} curl -s -o /dev/null -w "✅ %{http_code} {}\\n" "{}"
 
       - name: Warm up assets
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
         run: |
           set -e
-          echo "Fetching and warming up assets from index page..."
 
-          curl -sSL "${{ vars.SITE_URL }}" | \
-            grep -oP '(src|href)="\K[^"]+' | \
-            grep -E '\.(woff2?|ttf|eot|otf|js|css|png|jpg|jpeg|gif|webp|svg|ico|avif)' | \
-            grep -v '^#' | grep -E '^(/|https?:)' | \
-            sed -e "s|^/|${{ vars.SITE_URL }}/|" | \
-            sort -u | \
-            xargs -n1 -P10 -I {} curl -s -o /dev/null -w "%{http_code} {}\\n" "{}" || true
+          echo "Fetching homepage from $SITE_URL"
+          homepage=$(curl -s "$SITE_URL")
+
+          echo "Parsing asset URLs..."
+          mapfile -t assets < <(
+            echo "$homepage" | grep -oE 'src="([^"]+)"' | cut -d'"' -f2
+            echo "$homepage" | grep -oE 'href="([^"]+)"' | cut -d'"' -f2
+            echo "$homepage" | grep -oE 'url\(([^)]+)\)' | sed 's/url(//g; s/)//g; s/["'\'']//g'
+          )
+
+          # Deduplicate
+          assets=($(printf "%s\n" "${assets[@]}" | sort -u))
+
+          echo "Found ${#assets[@]} assets, warming up..."
+
+          for i in "${!assets[@]}"; do
+            asset="${assets[$i]}"
+            # Handle relative URLs
+            if [[ "$asset" =~ ^https?:// ]]; then
+              full_url="$asset"
+            else
+              full_url="$SITE_URL/$asset"
+            fi
+            assets[$i]="$full_url"
+          done
+
+          printf "%s\n" "${assets[@]}" | xargs -n 1 -P 10 -I {} curl -s -o /dev/null -w "✅ %{http_code} {}\\n" "{}"
