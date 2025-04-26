@@ -1,3 +1,36 @@
+@font-face {
+  font-family: 'Georgia';
+  src: local(Georgia);
+  font-weight: normal;
+  size-adjust: 103%;
+  ascent-override: 115%;
+  descent-override: 29%;
+  line-gap-override: normal;
+}
+
+@font-face {
+  font-family: 'Georgia';
+  src: local(Georgia);
+  font-weight: bold;
+  size-adjust: 109%;
+  ascent-override: 108%;
+  descent-override: 29%;
+  line-gap-override: normal;
+}
+
+@font-face {
+  font-family: 'Courier New';
+  src: local(Courier New);
+  size-adjust: 102%;
+  ascent-override: normal;
+  descent-override: normal;
+  line-gap-override: normal;
+}
+
+:root {
+  --font-mono: "Monaspace", 'Courier New', ui-monospace, monospace;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
