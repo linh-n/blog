@@ -70,14 +70,6 @@ jobs:
           CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
 
-      - name: Warm up URLs from sitemap
-        run: |
-          set -e
-          echo "Fetching and warming up URLs directly from sitemap..."
-          curl -sSL "${{ vars.SITE_URL }}/sitemap.xml" | \
-            grep -oP '(?<=<loc>)[^<]+' | \
-            xargs -n1 -P10 curl -s -o /dev/null -w "%{http_code} %{url_effective}\n"
-
       - name: Cleanup old deployments
         env:
           CF_API_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
@@ -129,3 +121,12 @@ jobs:
               jq -e '.success' >/dev/null || echo "Failed to delete $id"
             sleep 0.5
           done < deployments_to_delete.txt
+
+    
+      - name: Warm up URLs from sitemap
+        run: |
+          set -e
+          echo "Fetching and warming up URLs directly from sitemap..."
+          curl -sSL "${{ vars.SITE_URL }}/sitemap.xml" | \
+            grep -oP '(?<=<loc>)[^<]+' | \
+            xargs -n1 -P10 curl -s -o /dev/null -w "%{http_code} %{url_effective}\n"
