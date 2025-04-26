@@ -133,13 +133,12 @@ jobs:
       - name: Warm up assets
         run: |
           set -e
+          echo "Fetching and warming up assets from index page..."
 
-          # Fetch index page HTML
           curl -sSL "${{ vars.SITE_URL }}" | \
-            # Extract src and href attributes pointing to static assets
             grep -oP '(src|href)="\K[^"]+' | \
             grep -E '\.(woff2?|ttf|eot|otf|js|css|png|jpg|jpeg|gif|webp|svg|ico|avif)' | \
-            # Normalize relative URLs
+            grep -v '^#' | grep -E '^(/|https?:)' | \
             sed -e "s|^/|${{ vars.SITE_URL }}/|" | \
-            # Warm them up
-            xargs -n1 -P10 curl -s -o /dev/null -w "%{http_code} %{url_effective}\n"
+            sort -u | \
+            xargs -n1 -P10 -I {} curl -s -o /dev/null -w "%{http_code} {}\\n" "{}" || true
