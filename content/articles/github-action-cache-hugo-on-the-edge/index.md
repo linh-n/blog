@@ -11,7 +11,7 @@ readTime: false
 hideBackToTop: false
 ---
 
-If you are like me, who obsesses with performance, you probably want enable Edge Caching for your static site. Hope you find something useful in this article. I use this pipeline for this website as well.
+If you are like me, who obsesses with performance, you probably want enable Edge Caching for your static site. This action will help you purge the cache after each deployment. I use this pipeline for this website as well.
 
 Let's get directly to the action.
 
