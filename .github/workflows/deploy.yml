@@ -123,9 +123,23 @@ jobs:
           done < deployments_to_delete.txt
 
     
-      - name: Warm up cache
+      - name: Warm up pages
         run: |
           set -e
           curl -sSL "${{ vars.SITE_URL }}/sitemap.xml" | \
             grep -oP '(?<=<loc>)[^<]+' | \
+            xargs -n1 -P10 curl -s -o /dev/null -w "%{http_code} %{url_effective}\n"
+
+      - name: Warm up assets
+        run: |
+          set -e
+
+          # Fetch index page HTML
+          curl -sSL "${{ vars.SITE_URL }}" | \
+            # Extract src and href attributes pointing to static assets
+            grep -oP '(src|href)="\K[^"]+' | \
+            grep -E '\.(woff2?|ttf|eot|otf|js|css|png|jpg|jpeg|gif|webp|svg|ico|avif)' | \
+            # Normalize relative URLs
+            sed -e "s|^/|${{ vars.SITE_URL }}/|" | \
+            # Warm them up
             xargs -n1 -P10 curl -s -o /dev/null -w "%{http_code} %{url_effective}\n"
