@@ -35,7 +35,7 @@ url = "/"
 
 [[params.menu]]
 name = "about"
-url = "/about"
+url = "/about/"
 
 [markup]
 [markup.highlight]
