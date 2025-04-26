@@ -1,8 +1,8 @@
 ---
-title: ""
+title: "The MIT License (MIT)"
 summary: ""
 description: "MIT license"
-showTags: true
+showTags: false
 toc: false
 math: false
 readTime: false
@@ -10,9 +10,6 @@ hideBackToTop: true
 disableComment: true
 hidePagination: true
 ---
-
-The MIT License (MIT)
-----------------------
 
 Copyright © 2025 Linh Nguyen
 
