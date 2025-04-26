@@ -166,7 +166,7 @@ jobs:
             if [[ "$asset" =~ ^https?:// ]]; then
               full_url="$asset"
             else
-              full_url="$SITE_URL/$asset"
+              full_url="${SITE_URL%/}/$(echo "$asset" | sed 's#^/##')"
             fi
             assets[$i]="$full_url"
           done
