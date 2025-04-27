@@ -10,6 +10,7 @@ hideBackToTop: true
 disableComment: true
 hidePagination: true
 aliases:
+  - /mit/
   - /license/mit/
 ---
 

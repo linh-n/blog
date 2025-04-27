@@ -16,5 +16,5 @@ I'm Linh Nguyen, an enthusiastic developer who is always hungry for knowledge an
 
 If you want to get in touch, feel free to reach out to me at [linh@nguyen.be](mailto:linh@nguyen.be)
 
-The content is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) and the code provided is licensed under [MIT License](/mit/).
+The content is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) and the code provided is licensed under [MIT License](/license/).
 {.license}
