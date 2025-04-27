@@ -20,7 +20,6 @@
 $combined := $CSS
 | resources.Concat "assets/combined.css"
 | minify
-| fingerprint
 }}
   
 <style>{{ $combined.Content | safeCSS }}</style>
