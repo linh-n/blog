@@ -13,7 +13,7 @@ hideBackToTop: false
 
 ## Try/catch hell
 
-We all know the pain of try catching all possible errors, especially when dealing with network requests. Miss one error? Whole app can crash. Catching too much? Errors go into oblivion and users won't know what went wrong.
+It's a pain of try catching all possible errors, especially when dealing with network requests. Miss one error? Whole app can crash. Catching too much? Errors go into oblivion and users won't know what went wrong.
 
 ## Possible solutions
 
