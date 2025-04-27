@@ -124,6 +124,7 @@ jobs:
 
     
       - name: Warm up pages
+        if: github.ref_name == 'master'
         env:
           SITE_URL: ${{ vars.SITE_URL }}
         run: |
@@ -140,6 +141,7 @@ jobs:
           printf "%s\n" "${urls[@]}" | xargs -n 1 -P 10 -I {} curl -s -o /dev/null -w "✅ %{http_code} {}\\n" "{}"
 
       - name: Warm up assets
+        if: github.ref_name == 'master'
         env:
           SITE_URL: ${{ vars.SITE_URL }}
         run: |
