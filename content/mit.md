@@ -9,6 +9,8 @@ readTime: false
 hideBackToTop: true
 disableComment: true
 hidePagination: true
+aliases:
+  - /license/mit/
 ---
 
 Copyright © 2025 Linh Nguyen
