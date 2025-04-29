@@ -1,8 +1,8 @@
 ---
-title: "Snappy navigation with Next.js App router"
+title: "Next JS navigation feels slow? Make it snappy again!"
 date: "2025-04-23"
 summary: "No matter how fancy the App router has become with all bells and whistles, the clunky navigation experience always bothers me."
-description: "Fix the clunky navigation experience in Next.js App router with a simple solution."
+description: "Fix the slow navigation experience in Next.js App router with a simple solution."
 tags: ["nextjs", "react", "typescript"]
 showTags: true
 toc: false

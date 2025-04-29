@@ -1,5 +1,5 @@
 ---
-title: "A simple error handling method in TypeScript"
+title: "Error handling method in TypeScript with Result type"
 date: "2025-04-21"
 summary: "When it comes to error handling in TypeScript, throwing errors is not the best approach, especially where errors are expected. Let's explore a better alternative."
 description: "Simple yet effective error handling in TypeScript."
@@ -11,17 +11,7 @@ readTime: false
 hideBackToTop: false
 ---
 
-## Try/catch hell
-
-It's a pain of try catching all possible errors, especially when dealing with network requests. Miss one error? Whole app can crash. Catching too much? Errors go into oblivion and users won't know what went wrong.
-
-## Possible solutions
-
-Many libraries are out there, inspired by Go/Rust style of error handling. They use a pattern of returning an object with either a success or error state. This is great, but it can be cumbersome to implement and requires a lot of boilerplate code.
-
-## A simple method
-
-Instead of using a library, we can create a simple type to handle errors. This type will be a union of the expected result and an error object. This way, we can easily check if the result is an error or not.
+Many libraries are out there, inspired by Go/Rust style of error handling. They use a pattern of returning an object with either a success or error state. But if you prefer a simpler method, you can create your own type to handle errors in a more elegant way.
 
 ### Implementation
 
