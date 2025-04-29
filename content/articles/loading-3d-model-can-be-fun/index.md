@@ -1,6 +1,7 @@
 ---
 title: "Progressive loading of 3D models"
 date: "2025-03-08"
+lastmod: "2025-04-29"
 summary: "An approach to enhance the user experience during 3D model downloads by progressively rendering the model as data is received."
 description: "Progressive loading of 3D models to improve user experience."
 tags: ["3d", "threejs", "typescript", "shader"]
