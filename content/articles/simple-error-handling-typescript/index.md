@@ -13,7 +13,7 @@ hideBackToTop: false
 
 Many libraries are out there, inspired by Go/Rust style of error handling. They use a pattern of returning an object with either a success or error state. But if you prefer a simpler method, you can create your own type to handle errors in a more elegant way.
 
-### Implementation
+## Implementation
 
 ```ts
 export type ErrorMessage = {
@@ -36,7 +36,7 @@ export type Result<T> = NonNullable<Data<T> | Error>;
 
 The main star here is the `Result` type. Since it's a `NonNullable`, we can be sure that every time, we will have either a `data` or an `error` property. This way, we can easily check if the result is an error or not.
 
-### Usage
+## Usage
 
 Wherever you expect errors to happen, you can use this type. For example, in a network request:
 
