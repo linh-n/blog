@@ -1,6 +1,7 @@
 ---
 title: "The MIT License (MIT)"
 summary: ""
+lastmod: "2025-04-29"
 description: "MIT license"
 showTags: false
 toc: false
