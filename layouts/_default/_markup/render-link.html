@@ -9,6 +9,8 @@
   
   {{ if strings.HasPrefix .Destination "http" }}
     rel="noopener"
+    data-umami-event="outbound-link"
+    data-umami-event-url="{{ .Destination | safeURL }}"
   {{ end }}>
   
   {{ .Text | safeHTML }}
