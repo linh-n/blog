@@ -105,7 +105,7 @@ Feel free to use other options to host your Hugo site, but you will have to twea
 
 ### Cache
 
-You will have to add your domain to Cloudflare and enable the Cache Rules there. Just use `Cache Everything`, set `Edge TTL` to "Ignore cache-control header and use this TTL" and set the time to your liking. Since we will purge the cache after each deployment, you can set it a longer value if you want to.
+You will have to add your domain to Cloudflare and enable the Cache Rules there. Just use `Cache Everything`, set `Edge TTL` to "Ignore cache-control header and use this TTL" and set the time to your liking. Since we will purge the cache after each deployment, you can set it to a longer value if you want to.
 
 ### Github Action
 
